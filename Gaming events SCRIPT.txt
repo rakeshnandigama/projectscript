@@ -1,0 +1,768 @@
+NAME : RAKESH NANDIGAMA
+CWID : 20054070
+DBMS PROJECT SCRIPT
+DATE : 4/28/2014
+
+-- Table: continent
+
+
+
+
+CREATE TABLE continent
+(
+  id integer NOT NULL,
+  
+name character varying(25),
+  
+CONSTRAINT "pkIdContinent" PRIMARY KEY (id)
+
+);
+
+
+
+-- Table: country
+
+
+
+
+
+CREATE TABLE country
+(
+  id integer NOT NULL,
+  
+id_continent integer NOT NULL,
+  
+name character varying(25) NOT NULL,
+  
+CONSTRAINT "pkIdCountry" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdContinent" FOREIGN KEY (id_continent)
+      
+REFERENCES continent (id)
+); 
+
+
+-- Table: player
+
+
+
+
+
+CREATE TABLE player
+(
+  id integer NOT NULL,
+  
+fullname character varying(255) NOT NULL,
+  
+email character varying(255) NOT NULL,
+  
+address character varying(255) NOT NULL,
+  
+phone character varying(25) NOT NULL,
+  
+gender "char" NOT NULL,
+  
+id_country integer NOT NULL,
+  
+CONSTRAINT "pkIdPlayer" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdCountry" FOREIGN KEY (id_country)
+      
+REFERENCES country (id)
+);
+
+
+-- Table: clan
+
+
+
+
+CREATE TABLE clan
+(
+  id integer NOT NULL,
+  
+created_by integer NOT NULL,
+  
+name character varying(45) NOT NULL,
+  
+creation_date date NOT NULL,
+  
+CONSTRAINT "pkIdClan" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdPlayer1" FOREIGN KEY (created_by)
+      
+REFERENCES player (id)
+);
+
+
+-- Table: game_genre
+
+
+
+CREATE TABLE game_genre
+(
+  id integer NOT NULL,
+  
+name character varying(45) NOT NULL,
+  
+description character varying(255) NOT NULL,
+  
+CONSTRAINT "pkIdGameGenre" PRIMARY KEY (id)
+
+);
+
+
+-- Table: game
+
+
+
+CREATE TABLE game
+(
+  id integer NOT NULL,
+  
+id_games_genre integer NOT NULL,
+  
+name character varying(45) NOT NULL,
+  
+description character varying(255),
+  
+CONSTRAINT "pkIdGame" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdGameGenre" FOREIGN KEY (id_games_genre)
+      
+REFERENCES game_genre (id) 
+);
+
+
+-- Table: event
+
+
+
+
+
+CREATE TABLE event
+(
+  id integer NOT NULL,
+  
+id_game integer NOT NULL,
+  
+name character varying(255) NOT NULL,
+  
+start_date date NOT NULL,
+  
+end_date date NOT NULL,
+  
+CONSTRAINT "pkIdEvent" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdGame" FOREIGN KEY (id_game)
+      
+REFERENCES game (id) 
+);
+
+
+-- Table: player_clan
+
+
+
+CREATE TABLE player_clan
+(
+  id integer NOT NULL,
+  
+id_clan integer NOT NULL,
+  
+id_player integer NOT NULL,
+  date_from date NOT NULL,
+  
+until_date integer,
+  
+CONSTRAINT "pkIdPlayerClan" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdClan" FOREIGN KEY (id_clan)
+      
+REFERENCES clan (id), 
+CONSTRAINT "fkIdPlayer" FOREIGN KEY (id_player)
+      
+REFERENCES player (id) 
+);
+
+
+-- Table: ranking
+
+
+
+
+
+CREATE TABLE ranking
+(
+  id integer NOT NULL,
+  
+description character varying(255) NOT NULL,
+  
+CONSTRAINT "pkIdRanking" PRIMARY KEY (id)
+
+);
+
+
+
+-- Table: ranking_event
+
+
+
+CREATE TABLE ranking_event
+(
+  id integer NOT NULL,
+  
+id_player_clan integer NOT NULL,
+  
+id_event integer NOT NULL,
+  
+id_ranking integer NOT NULL,
+  
+points numeric NOT NULL DEFAULT 0,
+  
+CONSTRAINT "pkIdRankingEvent" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdEvent" FOREIGN KEY (id_event)
+      
+REFERENCES event (id), 
+CONSTRAINT "fkIdPlayerClan" FOREIGN KEY (id_player_clan)
+      
+REFERENCES player_clan (id), 
+CONSTRAINT "fkIdRanking" FOREIGN KEY (id_ranking)
+      
+REFERENCES ranking (id) 
+);
+
+
+-- Table: signed_for_event
+
+
+
+CREATE TABLE signed_for_event
+(
+  id integer NOT NULL,
+  
+id_player_clan integer NOT NULL,
+  
+id_event integer NOT NULL,
+  
+CONSTRAINT "pkIdPlayerSigned" PRIMARY KEY (id),
+  
+CONSTRAINT "fkIdEvent1" FOREIGN KEY (id_event)
+      
+REFERENCES event (id),
+CONSTRAINT "fkIdPlayerClan" FOREIGN KEY (id_player_clan)
+      
+REFERENCES player_clan (id)
+);
+
+
+--(-------------------------------------------------------insert statements)
+
+
+
+--(---------------------------------------------------- insert into continent)
+
+INSERT INTO continent(
+            id, name)
+    VALUES (1,'south america');
+
+INSERT INTO continent(
+            id, name)
+    VALUES (2,'north america');
+
+INSERT INTO continent(
+            id, name)
+    VALUES (3,'europe');
+
+INSERT INTO continent(
+            id, name)
+    VALUES (4,'asia');
+
+INSERT INTO continent(
+            id, name)
+    VALUES (5,'africa');
+
+--(-------------------------------------------------------- insert into country)
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (1,1,'venezuela');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (2,1,'colombia');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (3,2,'canada');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (4,2,'usa');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (5,3,'spain');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (6,3,'italy');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (7,4,'china');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (8,4,'japan');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (9,4,'south korea');
+
+INSERT INTO country(
+            id, id_continent, name)
+    VALUES (10,5,'south africa');
+
+
+--(---------------------------------------------------insert into player)
+    
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (3,'Rosenfeld Tuly','t.rosenfeld@unsw.edu.au','av 1,house #2-7',425375796475,'f','3');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (2,'Friedlander Michael Leonard','z9000657@unsw.edu.au','av 10,house #8-2','437854903267','M','2');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (1,'Andrews Peter Ian','i.andrews@UNSW.EDU.AU','av 3, house #15-2','653467633232','M','1');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (4,'Bateman Hazel Jane','h.bateman@UNSW.EDU.AU','av 8, house #5-9','325467896745','f','4');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (5,'Magnani Elisabetta','e.magnani@UNSW.EDU.AU','av 2, house #7-1','987645678976','F','5');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (6,'Meagher Kieron John','k.meagher@UNSW.EDU.AU','av 7, house #5-7','213456789012','M','6');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (7,'Zhao Yong','y.zhao@UNSW.EDU.AU','av 12, house #7-3','986745672331','M','7');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (8,'Maher Lisa','L.Maher@unsw.edu.au','av 30, house #45-30','356453758665','F','7');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (9,'Kaye Sharlene Susan','s.kaye@med.unsw.edu.au','av 20,house #3-1','898978677856','F','7');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (10,'Munro Richard','r.munro@UNSW.EDU.AU','av 10, house #7-9','434556677889','M','8');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (11,'Janssen David Adam','d.janssen@UNSW.EDU.AU','av 7,house #5-5','54545677876','M','8');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (12,'Hoffman Mark John','mark.hoffman@UNSW.EDU.AU','av 9, house #6-7','436587897654','M','8');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (13,'Murrell George Anthony Calvert','murrell.g@ori.org.au','av 2, house #8-4','098765767865','M','8');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (14,'Douglas Kurt John','k.douglas@unsw.edu.au','av 22.house #2-2','656587767865','M','9');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (15,'Sutherland Daniel David','d.sutherland@UNSW.EDU.AU','av 6 , house #7-4','213234456576','M','9');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (16,'Tompkins Robyn','r.tompkins@UNSW.EDU.AU','av 8 , house #3-5','676567789887','M','9');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (17,'Thompson Kevin Michael','z4510847@unsw.edu.au','av 9, house #6-6','566556566778','M','9');
+
+INSERT INTO player(
+            id, fullname, email, address, phone, gender, id_country)
+    VALUES (18,'Crawford Philip John','p.crawford@UNSW.EDU.AU','av 7, house #3-33','343443344343','M','10');
+
+
+--(-------------------------------------------------------insert into clan)
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (1,1,'cyborg','2013-01-02');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (2,2,'terminator','2013-06-07');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (3,3,'crazy','2013-08-09');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (4,4,'the random','2013-12-11');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (5,5,'ninja criminal','2013-10-11');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (6,6,'hiper skull','2013-09-08');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (7,7,'bipolar mission','2013-12-12');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (8,10,'liver code','2013-03-03');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (9,14,'cat polse','2013-04-04');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (10,18,'clan 080','2013-07-07');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (12,1,'clan rest of world','2014-02-02');
+
+INSERT INTO clan(
+            id, created_by, name, creation_date)
+    VALUES (11,11,'clan asia','2014-01-01');
+
+
+--(----------------------------------------------insert into game_genre)
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (1,'FPS','First-Person Shooter');
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (2,'MMO','Massively multiplayer online');
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (3,'MMORPG','massively multiplayer online role-playing game');
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (5,'TPS','third-person shooter');
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (6,'RACING','racing games');
+
+INSERT INTO game_genre(
+            id, name, description)
+    VALUES (4,'RPG','role-playing game');
+
+
+--(--------------------------------------------insert into game)
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (1,1,'Counter Strike','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (2,1,'call of duty','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (3,2,'Forge of empires','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (5,3,'dota 2','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (4,3,'LOL','league of legends');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (6,4,'diablo 3','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (7,5,'gears of war 3','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (9,6,'need for speed','');
+
+INSERT INTO game(
+            id, id_games_genre, name, description)
+    VALUES (8,6,'mario kart','');
+
+
+--(----------------------------------------------------insert into event)
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (2,3,'MMO event','2014-02-25','2014-03-04');
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (1,1,'FPS event','2014-03-03','2014-03-10');
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (4,6,'RPG event','2014-04-01','2014-04-07');
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (5,7,'TPS event','2014-03-20','2014-03-27');
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (6,9,'RACING event','2014-04-10','2014-04-17');
+
+INSERT INTO event(
+            id, id_game, name, start_date, end_date)
+    VALUES (3,5,'MMORPG event','2014-03-15','2014-03-22');
+
+
+--(------------------------------------------------insert into player_clan)
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (1,1,1,'2013-01-02',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (2,2,2,'2013-06-07',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (3,3,3,'2013-08-09',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (4,4,4,'2013-12-11',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (5,5,5,'2013-10-11',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (6,6,6,'2013-09-08',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (7,7,7,'2013-12-12',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (8,8,10,'2013-03-03',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (9,9,14,'2013-04-04',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (10,10,18,'2013-07-07',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (11,11,11,'2014-01-01',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (13,11,8,'2014-01-01',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (12,11,7,'2014-01-01',default);
+
+INSERT INTO player_clan(
+            id, id_clan, id_player, date_from, until_date)
+    VALUES (22,12,1,'2014-02-02',default);
+
+
+--(------------------------------------------------insert into ranking)
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (1,'ranking for FPS event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (2,'ranking for MMO event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (3,'ranking for MMORPG event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (4,'ranking for RPG event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (5,'ranking for TPS event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (6,'ranking for RACING event');
+
+INSERT INTO ranking(
+            id, description)
+    VALUES (8,'ranking for MMORPG event');
+
+
+--(----------------------------------------------insert into ranking)
+
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (1,1,1,1,378);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (2,2,2,2,276);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (3,3,3,3,408);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (4,4,4,4,356);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (5,5,5,5,698);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (6,6,6,6,790);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (7,11,1,1,989);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (8,2,1,1,678);
+
+INSERT INTO ranking_event(
+            id, id_player_clan, id_event, id_ranking, points)
+    VALUES (9,13,1,1,345);
+
+
+--(---------------------------------------insert into signed for event)
+
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (1,1,1);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (2,2,2);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (3,3,3);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (4,4,4);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (5,5,5);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (6,6,6);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (7,11,1);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (8,12,1);
+
+INSERT INTO signed_for_event(
+            id, id_player_clan, id_event)
+    VALUES (9,13,1);
+--(-------------------------------------------------------------------)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
